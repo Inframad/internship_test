@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface Repository {
 
-    fun getLatestNews(): Flow<List<Article>>
+    suspend fun getLatestNews(): Flow<List<Article>>
 }
