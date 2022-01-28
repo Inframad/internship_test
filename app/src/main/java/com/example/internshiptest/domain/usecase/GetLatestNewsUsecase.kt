@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class GetLatestNewsUsecase @Inject constructor(private val repository: Repository) {
 
-    operator fun invoke(): Flow<List<Article>> =
+    suspend operator fun invoke(): Flow<List<Article>> =
         repository.getLatestNews()
 
 }

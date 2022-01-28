@@ -11,6 +11,6 @@ class NewsFragmentViewModel
     private val getLatestNewsUsecase: GetLatestNewsUsecase
 ) : ViewModel() {
 
-    fun getLatestNews(): Flow<List<Article>> =
+    suspend fun getLatestNews(): Flow<List<Article>> =
         getLatestNewsUsecase()
 }
