@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.internshiptest.MainActivity
 import com.example.internshiptest.di.data.network.NetworkModule
 import com.example.internshiptest.di.domain.DomainModule
+import com.example.internshiptest.di.ui.UIModule
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -13,6 +14,7 @@ import javax.inject.Singleton
     modules = [
         DomainModule::class,
         NetworkModule::class,
+        UIModule::class
     ]
 )
 interface AppComponent {
