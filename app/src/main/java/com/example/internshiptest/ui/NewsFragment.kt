@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.internshiptest.App
 import com.example.internshiptest.databinding.FragmentNewsBinding
+import com.example.internshiptest.presentation.state.NewsFragmentState
 import com.example.internshiptest.presentation.viewmodel.NewsFragmentViewModel
 import javax.inject.Inject
 
@@ -46,10 +47,37 @@ class NewsFragment : Fragment() {
 
         val adapter = NewsListAdapter {}
 
-        binding.newsRv.adapter = adapter
+        binding.apply {
+            newsRv.adapter = adapter
 
-        viewModel.news.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+            swipeRefreshLayout.setOnRefreshListener {
+                viewModel.getLatestNews()
+            }
+        }
+
+        viewModel.apply {
+            state.observe(viewLifecycleOwner) { state ->
+                updateUI(state)
+            }
+
+            news.observe(viewLifecycleOwner) {
+                adapter.submitList(it)
+            }
+        }
+    }
+
+    private fun updateUI(state: NewsFragmentState) {
+        when (state) {
+            NewsFragmentState.LOADING -> {
+                binding.apply {
+                    swipeRefreshLayout.isRefreshing = true
+                }
+            }
+            NewsFragmentState.LOADED -> {
+                binding.apply {
+                    swipeRefreshLayout.isRefreshing = false
+                }
+            }
         }
     }
 }
