@@ -19,4 +19,5 @@ interface UIModule {
     @IntoMap
     @ViewModelKey(NewsFragmentViewModel::class)
     fun bindNewsFragmentViewModel(viewModel: NewsFragmentViewModel): ViewModel
+
 }

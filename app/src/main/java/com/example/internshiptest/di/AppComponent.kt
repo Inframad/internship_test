@@ -1,6 +1,7 @@
 package com.example.internshiptest.di
 
 import android.content.Context
+import com.example.internshiptest.di.data.DataModule
 import com.example.internshiptest.di.data.network.NetworkModule
 import com.example.internshiptest.di.domain.DomainModule
 import com.example.internshiptest.di.ui.UIModule
@@ -14,6 +15,7 @@ import javax.inject.Singleton
 @Component(
     modules = [
         DomainModule::class,
+        DataModule::class,
         NetworkModule::class,
         UIModule::class
     ]

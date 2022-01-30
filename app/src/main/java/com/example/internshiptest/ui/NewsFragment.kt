@@ -7,10 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.coroutineScope
 import com.example.internshiptest.App
 import com.example.internshiptest.databinding.FragmentNewsBinding
 import com.example.internshiptest.presentation.state.NewsFragmentState
 import com.example.internshiptest.presentation.viewmodel.NewsFragmentViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class NewsFragment : Fragment() {
@@ -51,7 +54,7 @@ class NewsFragment : Fragment() {
             newsRv.adapter = adapter
 
             swipeRefreshLayout.setOnRefreshListener {
-                viewModel.getLatestNews()
+                viewModel.updateNews()
             }
         }
 
@@ -60,9 +63,12 @@ class NewsFragment : Fragment() {
                 updateUI(state)
             }
 
-            news.observe(viewLifecycleOwner) {
-                adapter.submitList(it)
+            lifecycle.coroutineScope.launch {
+               getNews().collect { news ->
+                   adapter.submitList(news)
+               }
             }
+
         }
     }
 

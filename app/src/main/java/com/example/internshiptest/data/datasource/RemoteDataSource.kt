@@ -11,6 +11,6 @@ class RemoteDataSource @Inject constructor(
 
     suspend fun getLatestNews() =
         withContext(Dispatchers.IO) {
-            serverApi.getLatestNews().articles
+            serverApi.getResponse().articles
         }
 }
