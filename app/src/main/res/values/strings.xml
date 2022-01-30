@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Internship test</string>
     <string name="news_iv_desc">Image of an article</string>
+    <string name="offline_mode_msg">Интернет соединение недоступно. Загружены последние сохраненные новости</string>
+    <string name="unknown_error_msg">Произошла неизвестная ошибка. Попробуйте позднее</string>
+    <string name="ok">OK</string>
 </resources>

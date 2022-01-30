@@ -1,5 +1,6 @@
 package com.example.internshiptest.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,9 +9,11 @@ import com.example.internshiptest.domain.entity.Article
 import com.example.internshiptest.domain.usecase.GetNewsUsecase
 import com.example.internshiptest.domain.usecase.UpdateNewsUsecase
 import com.example.internshiptest.presentation.state.NewsFragmentState
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 class NewsFragmentViewModel
@@ -22,12 +25,20 @@ class NewsFragmentViewModel
     private val _state: MutableLiveData<NewsFragmentState> = MutableLiveData()
     val state: LiveData<NewsFragmentState> = _state
 
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _state.value = when (throwable) {
+            is UnknownHostException -> NewsFragmentState.OFFLINE_MODE
+            else -> NewsFragmentState.UNKNOWN_ERROR
+        }
+        Log.e("NewsFragment", throwable.toString())
+    }
+
     init {
-        //updateNews()
+        updateNews()
     }
 
     fun updateNews() {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             _state.value = NewsFragmentState.LOADING
             val deferredNews = async { updateNewsUsecase() }
             deferredNews.await()
