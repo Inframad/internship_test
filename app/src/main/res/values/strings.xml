@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Internship test</string>
+    <string name="news_iv_desc">Image of an article</string>
 </resources>

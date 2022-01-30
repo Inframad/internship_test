@@ -12,7 +12,7 @@ import com.example.internshiptest.databinding.FragmentNewsBinding
 import com.example.internshiptest.presentation.viewmodel.NewsFragmentViewModel
 import javax.inject.Inject
 
-class NewsFragment: Fragment() {
+class NewsFragment : Fragment() {
 
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
@@ -39,5 +39,17 @@ class NewsFragment: Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val adapter = NewsListAdapter {}
+
+        binding.newsRv.adapter = adapter
+
+        viewModel.news.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
     }
 }

@@ -1,9 +1,12 @@
 package com.example.internshiptest.presentation.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.internshiptest.domain.entity.Article
 import com.example.internshiptest.domain.usecase.GetLatestNewsUsecase
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class NewsFragmentViewModel
@@ -11,6 +14,17 @@ class NewsFragmentViewModel
     private val getLatestNewsUsecase: GetLatestNewsUsecase
 ) : ViewModel() {
 
-    suspend fun getLatestNews(): Flow<List<Article>> =
-        getLatestNewsUsecase()
+    private val _news: MutableLiveData<List<Article>> = MutableLiveData()
+    val news: LiveData<List<Article>> = _news
+
+    init {
+        getLatestNews()
+    }
+
+    private fun getLatestNews(){
+        viewModelScope.launch {
+            _news.value = getLatestNewsUsecase()
+        }
+    }
+
 }

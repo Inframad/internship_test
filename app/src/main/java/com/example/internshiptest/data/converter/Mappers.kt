@@ -6,8 +6,9 @@ import java.time.OffsetDateTime
 
 fun ArticleDTO.toArticle() =
     Article(
-        title = title,
-        description = description,
+        title = title ?: "No title",
+        description = description ?: "No description",
         date = OffsetDateTime.parse(publishedAt),
-        author = author
+        imageUrl = urlToImage ?: "", //TODO
+        author = author ?: "Unknown"
     )
