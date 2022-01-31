@@ -6,6 +6,7 @@ import com.example.internshiptest.di.data.network.NetworkModule
 import com.example.internshiptest.di.domain.DomainModule
 import com.example.internshiptest.di.ui.UIModule
 import com.example.internshiptest.ui.MainActivity
+import com.example.internshiptest.ui.NewsDetailFragment
 import com.example.internshiptest.ui.NewsFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -30,4 +31,5 @@ interface AppComponent {
 
     fun inject(activity: MainActivity)
     fun inject(fragment: NewsFragment)
+    fun inject(fragment: NewsDetailFragment)
 }

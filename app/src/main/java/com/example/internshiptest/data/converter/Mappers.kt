@@ -18,9 +18,10 @@ fun ArticleDTO.toArticleDb() =
 
 fun ArticleDb.toArticle() =
     Article(
-        title = title ?: "No title",
-        description = description ?: "No description",
+        id = id,
+        title = title ?: "",
+        description = description ?: "",
         date = OffsetDateTime.parse(publishedAt),
-        imageUrl = urlToImage ?: "", //TODO
-        author = author ?: "Unknown"
+        imageUrl = urlToImage ?: "",
+        author = author ?: ""
     )

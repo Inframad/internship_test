@@ -6,10 +6,8 @@ import com.example.internshiptest.data.datasource.RemoteDataSource
 import com.example.internshiptest.data.datasource.local.LocalDataSource
 import com.example.internshiptest.domain.entity.Article
 import com.example.internshiptest.domain.repository.Repository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
@@ -22,15 +20,12 @@ class RepositoryImpl @Inject constructor(
             it.map { articleDb -> articleDb.toArticle() }
         }
 
-    override suspend fun updateNews(): Boolean {
-        return withContext(Dispatchers.IO) {
-            val news = remoteDataSource.getLatestNews().map { articleDTO ->
-                articleDTO.toArticleDb()
-            }
-            localDataSource.deleteNews()
-            localDataSource.saveNews(news)
-            true
+    override suspend fun updateNews() {
+        val news = remoteDataSource.getLatestNews().map { articleDTO ->
+            articleDTO.toArticleDb()
         }
+        localDataSource.deleteNews()
+        localDataSource.saveNews(news)
     }
 
 }

@@ -7,7 +7,8 @@ class UpdateNewsUsecase @Inject constructor(
     private val repository: Repository
 ) {
 
-    suspend operator fun invoke(): Boolean =
+    suspend operator fun invoke() {
         repository.updateNews()
+    }
 
 }

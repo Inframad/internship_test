@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.example.internshiptest.databinding.NewsItemBinding
 import com.example.internshiptest.domain.entity.Article
 
-class NewsListAdapter (private val onClickItem: () -> Unit):
+class NewsListAdapter (private val onClickItem: (Int) -> Unit):
     ListAdapter<Article, ArticleViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
@@ -20,14 +20,14 @@ class NewsListAdapter (private val onClickItem: () -> Unit):
     }
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
-        holder.bind(getItem(position), onClickItem)
+        holder.bind(getItem(position),position, onClickItem)
     }
 
 }
 
 class DiffCallback : DiffUtil.ItemCallback<Article>() {
     override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
-        return oldItem.description == newItem.description
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {

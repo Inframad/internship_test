@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface Repository {
 
     fun getNews(): Flow<List<Article>>
-    suspend fun updateNews(): Boolean
+    suspend fun updateNews()
 }

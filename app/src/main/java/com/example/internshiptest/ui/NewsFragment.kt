@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.coroutineScope
+import androidx.recyclerview.widget.RecyclerView
 import com.example.internshiptest.App
 import com.example.internshiptest.R
 import com.example.internshiptest.databinding.FragmentNewsBinding
@@ -30,11 +31,23 @@ class NewsFragment : Fragment() {
 
     private var snackbar: Snackbar? = null
 
+    private val adapter = NewsListAdapter {
+        val bundle = Bundle()
+        bundle.putInt("Item position", it)
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.container, NewsDetailFragment::class.java, bundle, "NewsDetail")
+            .addToBackStack("News")
+            .commit()
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (requireActivity().application as App).appComponent.inject(this)
         viewModel =
-            ViewModelProvider(this, viewModelFactory)[NewsFragmentViewModel::class.java]
+            ViewModelProvider(
+                requireActivity(),
+                viewModelFactory
+            )[NewsFragmentViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -45,29 +58,14 @@ class NewsFragment : Fragment() {
         return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        snackbar?.dismiss()
-        _binding = null
-        snackbar = null
-    }
-
-    private fun showSnackbar(msg: String, actionName: String?, action: (View) -> Unit) {
-        snackbar = Snackbar.make(
-            binding.swipeRefreshLayout,
-            msg,
-            Snackbar.LENGTH_INDEFINITE
-        ).setAction(actionName, action)
-        snackbar?.show()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = NewsListAdapter {}
-
         binding.apply {
             newsRv.adapter = adapter
+
+            newsRv.adapter?.stateRestorationPolicy =
+                RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
             swipeRefreshLayout.setOnRefreshListener {
                 viewModel.updateNews()
@@ -80,12 +78,21 @@ class NewsFragment : Fragment() {
             }
 
             lifecycle.coroutineScope.launch {
-                getNews().collect { news ->
+                news.collect { news ->
                     adapter.submitList(news)
                 }
             }
 
         }
+    }
+
+    private fun showSnackbar(msg: String, actionName: String?, action: (View) -> Unit) {
+        snackbar = Snackbar.make(
+            binding.swipeRefreshLayout,
+            msg,
+            Snackbar.LENGTH_INDEFINITE
+        ).setAction(actionName, action)
+        snackbar?.show()
     }
 
     private fun updateUI(state: NewsFragmentState) {
@@ -105,7 +112,8 @@ class NewsFragment : Fragment() {
                 Toast.makeText(
                     context,
                     R.string.offline_mode_msg,
-                    Toast.LENGTH_LONG).show()
+                    Toast.LENGTH_LONG
+                ).show()
             }
             NewsFragmentState.UNKNOWN_ERROR -> {
                 binding.swipeRefreshLayout.isRefreshing = false
@@ -114,6 +122,20 @@ class NewsFragment : Fragment() {
                     getString(R.string.ok)
                 ) {}
             }
+            NewsFragmentState.SERVER_IS_NOT_AVAILABLE -> {
+                binding.swipeRefreshLayout.isRefreshing = false
+                showSnackbar(
+                    getString(R.string.server_is_not_available_msg),
+                    getString(R.string.ok)
+                ) {}
+            }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        snackbar?.dismiss()
+        _binding = null
+        snackbar = null
     }
 }
