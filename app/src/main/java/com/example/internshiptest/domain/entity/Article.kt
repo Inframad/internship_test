@@ -7,6 +7,6 @@ data class Article(
     val title: String,
     val description: String,
     val date: OffsetDateTime,
-    val imageUrl: String,
+    val imageUrl: String?,
     val author: String
 )

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.internshiptest.App
+import com.example.internshiptest.R
 import com.example.internshiptest.databinding.FragmentNewsDetailBinding
 import com.example.internshiptest.presentation.viewmodel.NewsFragmentViewModel
 import com.squareup.picasso.Picasso
@@ -51,7 +52,9 @@ class NewsDetailFragment: Fragment() {
             val article = viewModel.news.first()[position!!]
 
             binding.apply {
-                Picasso.get().load(article.imageUrl).into(newsIv)
+                Picasso.get().load(article.imageUrl)
+                    .placeholder(R.drawable.news_placeholder)
+                    .into(newsIv)
                 newsTitleTv.text = article.title
                 newsDescriptionTv.text = article.description
                 newsPublishedDateTv.text = article.date.format(DateTimeFormatter.ofPattern("dd.MM.yy hh:mm"))

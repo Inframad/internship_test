@@ -15,6 +15,7 @@ class ArticleViewHolder(
         Picasso.get()
             .load(article.imageUrl)
             .placeholder(R.drawable.news_placeholder)
+            .error(R.drawable.news_placeholder)
             .into(binding.newsIv)
 
         binding.newsTitleTv.text = article.title

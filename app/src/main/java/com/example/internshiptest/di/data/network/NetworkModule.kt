@@ -19,8 +19,8 @@ class NetworkModule {
         moshiConverterFactory: MoshiConverterFactory
     ): Retrofit =
         Retrofit.Builder()
-            //.baseUrl("https://newsapi.org/")
-            .baseUrl("https://run.mocky.io/")
+            .baseUrl("https://newsapi.org/")
+            //.baseUrl("https://run.mocky.io/")
             .addConverterFactory(moshiConverterFactory)
             .build()
 

@@ -22,6 +22,6 @@ fun ArticleDb.toArticle() =
         title = title ?: "",
         description = description ?: "",
         date = OffsetDateTime.parse(publishedAt),
-        imageUrl = urlToImage ?: "",
+        imageUrl = urlToImage,
         author = author ?: ""
     )
