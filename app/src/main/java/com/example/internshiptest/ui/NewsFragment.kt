@@ -97,14 +97,12 @@ class NewsFragment : Fragment() {
 
     private fun updateUI(state: NewsFragmentState) {
         when (state) {
-            NewsFragmentState.LOADING -> {
-                binding.apply {
-                    swipeRefreshLayout.isRefreshing = true
-                }
-            }
+            NewsFragmentState.LOADING ->
+                binding.swipeRefreshLayout.isRefreshing = true
             NewsFragmentState.LOADED -> {
                 binding.apply {
                     swipeRefreshLayout.isRefreshing = false
+                    nothingToShowLayout.visibility = View.GONE
                 }
             }
             NewsFragmentState.OFFLINE_MODE -> {
@@ -129,6 +127,8 @@ class NewsFragment : Fragment() {
                     getString(R.string.ok)
                 ) {}
             }
+            NewsFragmentState.NOTHING_TO_SHOW ->
+                binding.nothingToShowLayout.visibility = View.VISIBLE
         }
     }
 

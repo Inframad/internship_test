@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nothing_to_show_msg">Нет сохраненных новостей. Проверьте интернет соединение. Потяните вниз, чтобы попробовать загрузить новости снова</string>
+</resources>

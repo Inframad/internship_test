@@ -12,6 +12,7 @@ import com.example.internshiptest.presentation.state.NewsFragmentState.*
 import com.example.internshiptest.presentation.util.SingleLiveEvent
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -25,12 +26,14 @@ class NewsFragmentViewModel
     private val _state: SingleLiveEvent<NewsFragmentState> = SingleLiveEvent()
     val state: LiveData<NewsFragmentState> = _state
 
-    val news: Flow<List<Article>> = getNewsUsecase()
+    val news: Flow<List<Article>> = getNewsUsecase().onEach {
+        if (it.isEmpty()) _state.value = NOTHING_TO_SHOW
+    }
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         _state.value = when (throwable) {
             is UnknownHostException -> OFFLINE_MODE
-            is RequestError -> when(throwable.code) {
+            is RequestError -> when (throwable.code) {
                 500 -> SERVER_IS_NOT_AVAILABLE
                 else -> UNKNOWN_ERROR
             }

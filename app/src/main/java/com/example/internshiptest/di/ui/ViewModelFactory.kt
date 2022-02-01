@@ -13,6 +13,7 @@ class ViewModelFactory
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val viewModelProvider = viewModels[modelClass]
             ?: throw IllegalArgumentException("Model class $modelClass not found")
+        @Suppress("UNCHECKED_CAST")
         return viewModelProvider.get() as T
     }
 
